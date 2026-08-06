@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiestas de Agosto 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EBDFC1;
+    --paper-card:#FFFBF2;
+    --ink:#2B1B17;
+    --ink-soft:#5B4A41;
+    --saffron:#E8A33D;
+    --saffron-deep:#C77D1E;
+    --red:#A62639;
+    --red-deep:#7D1B2A;
+    --teal:#1D4E4E;
+    --teal-deep:#123636;
+    --line: rgba(43,27,23,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .bunting{
+    display:flex;
+    overflow:hidden;
+    height:26px;
+    width:100%;
+  }
+  .bunting span{
+    flex:1 0 22px;
+    height:22px;
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    animation: sway 3.2s ease-in-out infinite;
+    transform-origin: top center;
+  }
+  .bunting span:nth-child(4n){background:var(--red);}
+  .bunting span:nth-child(4n+1){background:var(--saffron);}
+  .bunting span:nth-child(4n+2){background:var(--teal);}
+  .bunting span:nth-child(4n+3){background:var(--paper-card);}
+  .bunting span:nth-child(odd){animation-delay:0.15s;}
+  @keyframes sway{
+    0%,100%{transform:rotate(-2deg);}
+    50%{transform:rotate(2deg);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .bunting span{animation:none;}
+  }
+
+  header.hero{
+    padding:22px 20px 26px;
+    text-align:center;
+  }
+  header.hero h1{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(2.6rem, 10vw, 3.6rem);
+    letter-spacing:0.03em;
+    margin:6px 0 2px;
+    color:var(--red-deep);
+    line-height:0.95;
+  }
+  header.hero .sub{
+    font-family:'Bebas Neue', sans-serif;
+    letter-spacing:0.12em;
+    font-size:1.1rem;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+  }
+  header.hero p{
+    max-width:480px;
+    margin:0 auto;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    line-height:1.45;
+  }
+
+  nav.days{
+    position:sticky;
+    top:0;
+    z-index:10;
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:10px 14px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    -webkit-overflow-scrolling:touch;
+  }
+  nav.days a{
+    flex:0 0 auto;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    font-weight:500;
+    text-decoration:none;
+    color:var(--ink);
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:18px 14px 0;
+  }
+
+  .day-section{
+    margin-bottom:34px;
+    scroll-margin-top:56px;
+  }
+  .day-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:6px;
+    margin-bottom:14px;
+  }
+  .day-head .num{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:2.4rem;
+    line-height:1;
+    color:var(--red-deep);
+  }
+  .day-head .meta{
+    display:flex;
+    flex-direction:column;
+  }
+  .day-head .weekday{
+    font-family:'IBM Plex Mono', monospace;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+  }
+  .day-head .month{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+
+  .nada{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    background:var(--paper-card);
+    border:1px dashed var(--line);
+    border-radius:10px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .card{
+    background:var(--paper-card);
+    border-radius:14px;
+    padding:16px 16px 14px;
+    margin-bottom:14px;
+    border:1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(43,27,23,0.05);
+  }
+  .card.comida{border-left:5px solid var(--saffron-deep);}
+  .card.cena{border-left:5px solid var(--teal);}
+  .card.actividad{border-left:5px solid var(--red);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  .card-top h3{
+    margin:0;
+    font-size:1.05rem;
+    font-weight:700;
+  }
+  .tag-type{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.65rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    padding:3px 8px;
+    border-radius:20px;
+    color:#fff;
+  }
+  .comida .tag-type{background:var(--saffron-deep);}
+  .cena .tag-type{background:var(--teal);}
+  .actividad .tag-type{background:var(--red);}
+
+  .block-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+    margin:10px 0 6px;
+  }
+
+  .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .tag{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:5px 6px 5px 12px;
+    font-size:0.85rem;
+  }
+  .tag.resp{
+    background:#fff2dc;
+    border-color:var(--saffron-deep);
+  }
+  .tag button{
+    border:none;
+    background:transparent;
+    color:var(--ink-soft);
+    cursor:pointer;
+    font-size:0.9rem;
+    line-height:1;
+    padding:2px 4px;
+  }
+  .empty-hint{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    font-style:italic;
+    margin-bottom:8px;
+  }
+
+  .add-row{
+    display:flex;
+    gap:6px;
+  }
+  .add-row input{
+    flex:1;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    font-family:'Work Sans', sans-serif;
+    font-size:0.88rem;
+    background:#fff;
+  }
+  .add-row button{
+    padding:8px 14px;
+    border-radius:8px;
+    border:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:#fff;
+    cursor:pointer;
+  }
+  .comida .add-row button{background:var(--saffron-deep);}
+  .cena .add-row button{background:var(--teal-deep);}
+  .actividad .add-row button{background:var(--red-deep);}
+
+  footer{
+    text-align:center;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    padding:24px 20px 0;
+  }
+  .status{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    height:16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bunting" id="bunting"></div>
+
+<header class="hero">
+  <h1>Fiestas de Agosto</h1>
+  <div class="sub">14 — 18 · AGOSTO · 2026</div>
+  <p>Apúntate a lo que vas a hacer y quién se encarga de cada cosa. Se guarda al momento y lo ve todo el grupo.</p>
+</header>
+
+<nav class="days" id="daynav"></nav>
+
+<main id="main"></main>
+
+<div class="status" id="status"></div>
+
+<footer>Toca "Añadir" para apuntarte · toca la ✕ de un nombre para quitarlo</footer>
+
+<script>
+// --- CONFIGURACIÓN DE MULTIUSUARIO ---
+const JSONBIN_ID = '6a70541af5f4af5e29e42732'; 
+const JSONBIN_KEY = '$2a$10$X1tRfHHgvvpGtiTG541hFe27XYhzHDyrda01SikHs400Yi/5UazlK'; 
+
+const initialState = {
+  days: [
+    {
+      date: '14/08/2026',
+      note: null,
+      activities: [
+        {
+          id: 'comida-paella-14',
+          title: 'Comida paella en la peña',
+          type: 'comida',
+          participants: ['Mar (3)','Pili','Potache','Romina','Joselu','Angel Mario','Rocío','Jesús','Sonia','Chiquino','Ángel','Lleida (2)','Cesar, Ainhoa y Valeria','Juanpe (3)'],
+          responsables: []
+        },
+        {
+          id: 'desfile-peñas-14',
+          title: 'Desfile de peñas',
+          type: 'actividad',
+          participants: ['Rocío, Jesús e Izan'],
+          responsables: []
+        },
+        {
+          id: 'cena-bbq-14',
+          title: 'Cena BBQ',
+          type: 'cena',
+          participants: ['Mar (3)'],
+          responsables: ['Richard']
+        }
+      ]
+    },
+    {
+      date: '15/08/2026',
+      note: 'Sin planes',
+      activities: []
+    },
+    {
+      date: '16/08/2026',
+      note: null,
+      activities: [
+        { id: 'cena-bbq-16', title: 'Cena BBQ', type: 'cena', participants: [], responsables: [] }
+      ]
+    },
+    {
+      date: '17/08/2026',
+      note: null,
+      activities: [
+        { id: 'comida-17', title: 'Comida (paella de encargo)', type: 'comida', participants: [], responsables: [] },
+        { id: 'cena-extra-17', title: 'Cena extra (raciones de encargo)', type: 'cena', participants: [], responsables: [] }
+      ]
+    },
+    {
+      date: '18/08/2026',
+      note: null,
+      activities: [
+        { id: 'comida-extra-18', title: 'Comida extra (raciones de encargo)', type: 'comida', participants: [], responsables: [] },
+        { id: 'cena-extra-18', title: 'Cena extra', type: 'cena', participants: [], responsables: [] },
+        { id: 'actividades-18', title: 'Actividades', type: 'actividad', participants: [], responsables: [] }
+      ]
+    }
+  ]
+};
+
+let state = null;
+
+function setStatus(msg, isError){
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.style.color = isError ? '#A62639' : '';
+  if(msg) setTimeout(()=>{ if(el.textContent===msg) el.textContent=''; }, 2500);
+}
+
+async function loadState(){
+  setStatus('Cargando datos...');
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_KEY }
+    });
+    
+    if(!res.ok) throw new Error(`HTTP Error ${res.status}`);
+    
+    const data = await res.json();
+    
+    if (data && data.record && Array.isArray(data.record.days)) {
+      state = data.record;
+    } else {
+      state = initialState;
+      await saveState();
+    }
+    setStatus('');
+  } catch(e) {
+    console.error('Error al cargar datos de JSONBin:', e);
+    state = initialState;
+    setStatus('Cargado modo local (error de sincronización)', true);
+  }
+}
+
+async function saveState(){
+  setStatus('Guardando en la nube...');
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_KEY
+      },
+      body: JSON.stringify(state)
+    });
+    if(!res.ok) throw new Error('Error al guardar');
+    setStatus('Guardado ✓');
+  } catch(e) {
+    console.error(e);
+    setStatus('No se pudo guardar, inténtalo de nuevo', true);
+  }
+}
+
+function weekdayLabel(dateStr){
+  const [d,m,y] = dateStr.split('/').map(Number);
+  const dt = new Date(y, m-1, d);
+  const wd = dt.toLocaleDateString('es-ES', {weekday:'long'});
+  const month = dt.toLocaleDateString('es-ES', {month:'long'});
+  return { weekday: wd.charAt(0).toUpperCase()+wd.slice(1), month, day: d };
+}
+
+const TYPE_LABEL = { comida:'Comida', cena:'Cena', actividad:'Actividad' };
+
+function renderBunting(){
+  const b = document.getElementById('bunting');
+  let html = '';
+  for(let i=0;i<22;i++) html += '<span></span>';
+  b.innerHTML = html;
+}
+
+function renderNav(){
+  const nav = document.getElementById('daynav');
+  nav.innerHTML = state.days.map(d=>{
+    const {weekday, day} = weekdayLabel(d.date);
+    return `<a href="#day-${day}">${weekday.slice(0,3)} ${day}</a>`;
+  }).join('');
+}
+
+function tagHtml(name, dIdx, aIdx, field, tIdx, isResp){
+  return `<span class="tag ${isResp?'resp':''}">${escapeHtml(name)}<button data-remove="${dIdx}|${aIdx}|${field}|${tIdx}" aria-label="Quitar">✕</button></span>`;
+}
+
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderMain(){
+  const main = document.getElementById('main');
+  main.innerHTML = state.days.map((day, dIdx)=>{
+    const {weekday, month, day: dnum} = weekdayLabel(day.date);
+    let body;
+    if(day.activities.length === 0){
+      body = `<div class="nada">${day.note || 'Nada programado'}</div>`;
+    }else{
+      body = day.activities.map((act, aIdx)=>{
+        const partTags = act.participants.length
+          ? `<div class="tags">${act.participants.map((n,tIdx)=>tagHtml(n,dIdx,aIdx,'participants',tIdx,false)).join('')}</div>`
+          : `<div class="empty-hint">Nadie apuntado todavía</div>`;
+        const respTags = act.responsables.length
+          ? `<div class="tags">${act.responsables.map((n,tIdx)=>tagHtml(n,dIdx,aIdx,'responsables',tIdx,true)).join('')}</div>`
+          : `<div class="empty-hint">Sin responsable asignado</div>`;
+        return `
+        <div class="card ${act.type}">
+          <div class="card-top">
+            <h3>${escapeHtml(act.title)}</h3>
+            <span class="tag-type">${TYPE_LABEL[act.type]}</span>
+          </div>
+          <div class="block-label">Participan</div>
+          ${partTags}
+          <div class="add-row">
+            <input type="text" placeholder="Tu nombre" id="in-${dIdx}-${aIdx}-participants" />
+            <button data-add="${dIdx}|${aIdx}|participants">Añadir</button>
+          </div>
+          <div class="block-label">Responsables</div>
+          ${respTags}
+          <div class="add-row">
+            <input type="text" placeholder="Nombre responsable" id="in-${dIdx}-${aIdx}-responsables" />
+            <button data-add="${dIdx}|${aIdx}|responsables">Añadir</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    return `
+    <section class="day-section" id="day-${dnum}">
+      <div class="day-head">
+        <div class="num">${dnum}</div>
+        <div class="meta">
+          <div class="weekday">${weekday}</div>
+          <div class="month">${month} 2026</div>
+        </div>
+      </div>
+      ${body}
+    </section>`;
+  }).join('');
+
+  main.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.addEventListener('click', onAdd);
+  });
+  main.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('keydown', e=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        const [dIdx,aIdx,field] = inp.id.replace('in-','').split('-');
+        addPerson(Number(dIdx), Number(aIdx), field, inp);
+      }
+    });
+  });
+  main.querySelectorAll('[data-remove]').forEach(btn=>{
+    btn.addEventListener('click', onRemove);
+  });
+}
+
+async function onAdd(e){
+  const [dIdx, aIdx, field] = e.currentTarget.getAttribute('data-add').split('|');
+  const input = document.getElementById(`in-${dIdx}-${aIdx}-${field}`);
+  await addPerson(Number(dIdx), Number(aIdx), field, input);
+}
+
+async function addPerson(dIdx, aIdx, field, input){
+  const name = input.value.trim();
+  if(!name) return;
+  state.days[dIdx].activities[aIdx][field].push(name);
+  input.value = '';
+  renderMain();
+  await saveState();
+}
+
+async function onRemove(e){
+  const [dIdx, aIdx, field, tIdx] = e.currentTarget.getAttribute('data-remove').split('|');
+  state.days[Number(dIdx)].activities[Number(aIdx)][field].splice(Number(tIdx), 1);
+  renderMain();
+  await saveState();
+}
+
+async function init(){
+  renderBunting();
+  await loadState();
+  renderNav();
+  renderMain();
+}
+
+init();
+</script>
+</body>
+</html>
