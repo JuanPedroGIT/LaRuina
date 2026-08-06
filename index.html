@@ -365,12 +365,46 @@ let programState = null;
 let pollsState = null;
 let pollsLoaded = false;
 let currentTab = 'program';
+let useMock = false;
 
-function setStatus(msg, isError){
+const MOCK_PROGRAM = {
+  days: [
+    { date:'14/08/2026', note:'Viernes — Arranque', activities:[
+      { type:'comida', title:'Paella popular', participants:['Ana','Luis'], responsables:['Juan'] },
+      { type:'actividad', title:'Concierto de apertura', participants:['Marta','Carlos','Elena'], responsables:['DJ Pepe'] }
+    ]},
+    { date:'15/08/2026', note:'Sábado — Fiestón', activities:[
+      { type:'comida', title:'Asador al aire libre', participants:[], responsables:['María'] },
+      { type:'cena', title:'Cena de gala', participants:['Pedro'], responsables:[] }
+    ]},
+    { date:'16/08/2026', note:'Domingo — Familiar', activities:[
+      { type:'actividad', title:'Juegos infantiles', participants:['Sofía','Leo','Emma'], responsables:['Monitora Ana'] }
+    ]},
+    { date:'17/08/2026', note:'Lunes — Relax', activities:[] },
+    { date:'18/08/2026', note:'Martes — Clausura', activities:[
+      { type:'cena', title:'Cena de despedida', participants:[], responsables:[] },
+      { type:'actividad', title:'Fuegos artificiales', participants:['Todos'], responsables:['Comisión'] }
+    ]}
+  ]
+};
+
+const MOCK_POLLS = [
+  { id:'mock-1', question:'¿Qué cenamos el sábado 15?', options:[
+    { text:'Paella', votes:['Ana','Luis'] },
+    { text:'Asado', votes:['Pedro'] },
+    { text:'Pizza', votes:['Marta','Carlos','Elena'] }
+  ]},
+  { id:'mock-2', question:'¿Bebida para la cena de clausura?', options:[
+    { text:'Vino tinto', votes:['Juan'] },
+    { text:'Cerveza', votes:['Pedro','Luis'] }
+  ]}
+];
+
+function setStatus(msg, isError, sticky){
   const el = document.getElementById('status');
   el.textContent = msg;
   el.style.color = isError ? '#A62639' : '';
-  if(msg) setTimeout(()=>{ if(el.textContent===msg) el.textContent=''; }, 2500);
+  if(msg && !sticky) setTimeout(()=>{ if(el.textContent===msg) el.textContent=''; }, 2500);
 }
 
 async function loadProgram() {
@@ -381,10 +415,14 @@ async function loadProgram() {
     const data = await res.json();
     programState = data.record;
     setStatus('');
+    return;
   } catch (e) {
     console.error('Error al cargar programa:', e);
-    setStatus('Error al cargar datos del programa', true);
   }
+  // fallback a mock
+  programState = JSON.parse(JSON.stringify(MOCK_PROGRAM));
+  useMock = true;
+  setStatus('⚠ Usando datos de ejemplo — cambios no se guardan', true, true);
 }
 
 async function loadPolls() {
@@ -394,7 +432,6 @@ async function loadPolls() {
     const res = await fetch('/.netlify/functions/api?resource=polls');
     if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
     const data = await res.json();
-    
     if (data.record && Array.isArray(data.record.polls)) {
       pollsState = data.record.polls;
     } else if (Array.isArray(data.record)) {
@@ -402,17 +439,24 @@ async function loadPolls() {
     } else {
       pollsState = [];
     }
-    
     pollsLoaded = true;
     setStatus('');
+    return;
   } catch (e) {
     console.error('Error al cargar encuestas:', e);
-    pollsState = [];
-    setStatus('Error al cargar encuestas', true);
   }
+  // fallback a mock
+  pollsState = JSON.parse(JSON.stringify(MOCK_POLLS));
+  pollsLoaded = true;
+  useMock = true;
+  setStatus('⚠ Usando datos de ejemplo — cambios no se guardan', true, true);
 }
 
 async function saveProgram() {
+  if(useMock){
+    setStatus('⚠ Modo demo — los cambios no se guardan', true, true);
+    return;
+  }
   setStatus('Guardando programa...');
   try {
     const res = await fetch('/.netlify/functions/api?resource=program', {
@@ -428,6 +472,10 @@ async function saveProgram() {
 }
 
 async function savePolls() {
+  if(useMock){
+    setStatus('⚠ Modo demo — los cambios no se guardan', true, true);
+    return;
+  }
   setStatus('Guardando encuestas...');
   try {
     const res = await fetch('/.netlify/functions/api?resource=polls', {
@@ -496,7 +544,27 @@ function renderMainProgram(){
   const main = document.getElementById('main');
   if(!programState || !programState.days) return;
 
-  main.innerHTML = programState.days.map((day, dIdx)=>{
+  const createForm = `
+    <div class="card encuesta" style="margin-bottom:22px;">
+      <div class="card-top">
+        <h3>➕ Nueva actividad</h3>
+      </div>
+      <div class="poll-form">
+        <select id="new-act-day" style="padding:8px;border-radius:8px;border:1px solid var(--line);font-family:'Work Sans',sans-serif;font-size:0.88rem;background:#fff;">
+          ${programState.days.map((d,idx)=>{ const w = weekdayLabel(d.date); return `<option value="${idx}">${w.weekday} ${w.day} — ${d.note || d.date}</option>`; }).join('')}
+        </select>
+        <input type="text" id="new-act-title" placeholder="Título de la actividad" />
+        <select id="new-act-type" style="padding:8px;border-radius:8px;border:1px solid var(--line);font-family:'Work Sans',sans-serif;font-size:0.88rem;background:#fff;">
+          <option value="comida">🍽️ Comida</option>
+          <option value="cena">🌙 Cena</option>
+          <option value="actividad">🎉 Actividad</option>
+        </select>
+        <button type="button" class="btn-sec" style="background:var(--red-deep);" onclick="addActivity()">Crear actividad</button>
+      </div>
+    </div>
+  `;
+
+  main.innerHTML = createForm + programState.days.map((day, dIdx)=>{
     const {weekday, month, day: dnum} = weekdayLabel(day.date);
     let body;
     if(day.activities.length === 0){
@@ -513,7 +581,10 @@ function renderMainProgram(){
         <div class="card ${act.type}">
           <div class="card-top">
             <h3>${escapeHtml(act.title)}</h3>
-            <span class="tag-type">${TYPE_LABEL[act.type]}</span>
+            <div>
+              <span class="tag-type">${TYPE_LABEL[act.type] || escapeHtml(act.type)}</span>
+              <button class="btn-danger" style="margin-left:8px;" onclick="deleteActivity(${dIdx},${aIdx})">Eliminar</button>
+            </div>
           </div>
           <div class="block-label">Participan</div>
           ${partTags}
@@ -623,6 +694,23 @@ function renderMainPolls(){
 }
 
 // Acciones Programa
+async function addActivity(){
+  const dayIdx = Number(document.getElementById('new-act-day').value);
+  const title = document.getElementById('new-act-title').value.trim();
+  const type = document.getElementById('new-act-type').value;
+  if(!title){ alert('Escribe un título'); return; }
+  programState.days[dayIdx].activities.push({ type, title, participants:[], responsables:[] });
+  renderMainProgram();
+  await saveProgram();
+}
+
+async function deleteActivity(dIdx, aIdx){
+  if(!confirm('¿Eliminar esta actividad?')) return;
+  programState.days[dIdx].activities.splice(aIdx, 1);
+  renderMainProgram();
+  await saveProgram();
+}
+
 async function onAddAct(e){
   const [dIdx, aIdx, field] = e.currentTarget.getAttribute('data-add-act').split('|');
   const input = document.getElementById(`in-${dIdx}-${aIdx}-${field}`);
