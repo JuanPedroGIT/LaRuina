@@ -117,9 +117,13 @@
     gap:8px;
     overflow-x:auto;
     padding:10px 14px;
-    -webkit-backdrop-filter:blur(6px);
-    border-bottom:1px solid var(--line);
+    border-bottom:1px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
     -webkit-overflow-scrolling:touch;
+  }
+  nav.days.is-stuck{
+    background:var(--paper);
+    border-bottom-color:var(--line);
   }
   nav.days a{
     flex:0 0 auto;
@@ -737,7 +741,10 @@ async function addPersonAct(dIdx, aIdx, field, input){
 }
 
 async function onRemoveAct(e){
-  const [dIdx, aIdx, field, tIdx] = e.currentTarget.getAttribute('data-remove-act').split('|');
+  const btn = e.currentTarget;
+  const name = btn.parentElement.textContent.replace('✕','').trim();
+  if(!confirm(`¿Quitar a «${name}»?`)) return;
+  const [dIdx, aIdx, field, tIdx] = btn.getAttribute('data-remove-act').split('|');
   programState.days[Number(dIdx)].activities[Number(aIdx)][field].splice(Number(tIdx), 1);
   renderMainProgram();
   await saveProgram();
@@ -803,10 +810,24 @@ async function addVote(pIdx, oIdx, input){
 }
 
 async function onRemoveVote(e){
-  const [pIdx, oIdx, vIdx] = e.currentTarget.getAttribute('data-remove-vote').split('|');
+  const btn = e.currentTarget;
+  const name = btn.parentElement.textContent.replace('✕','').trim();
+  if(!confirm(`¿Quitar a «${name}»?`)) return;
+  const [pIdx, oIdx, vIdx] = btn.getAttribute('data-remove-vote').split('|');
   pollsState[Number(pIdx)].options[Number(oIdx)].votes.splice(Number(vIdx), 1);
   renderMainPolls();
   await savePolls();
+}
+
+function setupStickyNav(){
+  const nav = document.getElementById('daynav');
+  const sentinel = document.createElement('div');
+  sentinel.style.cssText = 'height:1px;pointer-events:none;';
+  nav.parentNode.insertBefore(sentinel, nav);
+  const observer = new IntersectionObserver(([e])=>{
+    nav.classList.toggle('is-stuck', !e.isIntersecting);
+  }, {});
+  observer.observe(sentinel);
 }
 
 async function init(){
@@ -814,6 +835,7 @@ async function init(){
   await loadProgram();
   renderNav();
   renderMainProgram();
+  setupStickyNav();
 }
 
 init();
