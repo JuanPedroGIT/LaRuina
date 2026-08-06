@@ -202,13 +202,23 @@
   .card-top{
     display:flex;
     justify-content:space-between;
-    align-items:center;
+    align-items:flex-start;
+    gap:10px;
     margin-bottom:10px;
   }
   .card-top h3{
     margin:0;
     font-size:1.05rem;
     font-weight:700;
+    flex:1;
+    min-width:0;
+    word-break:break-word;
+  }
+  .card-top .card-actions{
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:8px;
   }
   .tag-type{
     font-family:'IBM Plex Mono', monospace;
@@ -581,9 +591,9 @@ function renderMainProgram(){
         <div class="card ${act.type}">
           <div class="card-top">
             <h3>${escapeHtml(act.title)}</h3>
-            <div>
+            <div class="card-actions">
               <span class="tag-type">${TYPE_LABEL[act.type] || escapeHtml(act.type)}</span>
-              <button class="btn-danger" style="margin-left:8px;" onclick="deleteActivity(${dIdx},${aIdx})">Eliminar</button>
+              <button class="btn-danger" onclick="deleteActivity(${dIdx},${aIdx})">Eliminar</button>
             </div>
           </div>
           <div class="block-label">Participan</div>
