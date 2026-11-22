@@ -1,0 +1,39 @@
+{
+  "days": [
+    {
+      "date": "27/11/2026",
+      "note": "Viernes — ¡Arrancamos! 🎉",
+      "activities": [
+        { "type": "actividad", "title": "🕔 17:00–19:00 · Llegada de las familias, reparto de habitaciones y reconocimiento del terreno", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "🍻 19:00–21:00 · Primeras cervecitas, piscina, juegos y puesta al día", "participants": [], "responsables": [] },
+        { "type": "cena", "title": "🍕 21:00–22:30 · Cena de picoteo: pizzas, tortillas, empanadas, embutidos…", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "🎲 22:30 en adelante · Juegos, charlas, risas y lo que surja", "participants": [], "responsables": [] }
+      ]
+    },
+    {
+      "date": "28/11/2026",
+      "note": "Sábado — Día grande 🍖🏊",
+      "activities": [
+        { "type": "comida", "title": "☕ 9:00–10:00 · Desayuno sin prisas", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "🦣 10:00–13:00 · Plan A: excursión a Paleolítico Vivo", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "🏡 10:00–13:00 · Plan B: quedarnos en la casa, piscina, juegos y relax", "participants": [], "responsables": [] },
+        { "type": "comida", "title": "🔥 13:30–15:30 · ¡Barbacoa! 🍖🥩", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "☕ 15:30–17:00 · Sobremesa, café y descanso", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "🏊 17:00–20:30 · Piscina climatizada, futbolín, juegos con los niños y tiempo libre", "participants": [], "responsables": [] },
+        { "type": "cena", "title": "🍔 21:00–22:30 · Cena informal: hamburguesas, pizzas o picoteo", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "🎉 22:30 en adelante · ¡Gran noche rural! Música, juegos, risas y diversión", "participants": [], "responsables": [] }
+      ]
+    },
+    {
+      "date": "29/11/2026",
+      "note": "Domingo — ¡Último día! 🥹",
+      "activities": [
+        { "type": "comida", "title": "☕ 9:30–10:30 · Desayuno tranquilo", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "🏊 10:30–12:30 · Último chapuzón, juegos y recogida de habitaciones", "participants": [], "responsables": [] },
+        { "type": "comida", "title": "🍻 12:30–14:00 · Aperitivo y preparar la comida", "participants": [], "responsables": [] },
+        { "type": "comida", "title": "🥘 14:00–15:30 · Comida todos juntos: paella, fideuá o lo que decidamos encargar", "participants": [], "responsables": [] },
+        { "type": "actividad", "title": "🧳 15:30–17:00 · Recogida, despedidas y vuelta a casa", "participants": [], "responsables": [] }
+      ]
+    }
+  ]
+}
