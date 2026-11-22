@@ -15,6 +15,7 @@ La app se despliega en **Netlify** con una función serverless para la persisten
 ```
 .
 ├── index.html              # Frontend completo (HTML + CSS + JS embebidos)
+├── config.json             # Títulos de la web y fechas de las fiestas (editar aquí)
 ├── favicon.svg             # Favicon y marca de agua
 ├── laRuina.png             # Imagen/logo de La Ruina
 ├── netlify.toml            # Config de Netlify (directorio de funciones)
@@ -32,6 +33,20 @@ Variables de entorno necesarias en el panel de Netlify (**Site configuration > E
 | `JSONBIN_KEY` | API key de JSONBin.io (master key) |
 | `JSONBIN_PROGRAM_ID` | ID del bin donde se guarda el programa de actividades |
 | `JSONBIN_POLLS_ID` | ID del bin donde se guardan las encuestas |
+
+## ⚙️ Configuración (`config.json`)
+
+Los textos de la cabecera y los días de las fiestas se cambian en `config.json`, sin tocar el HTML:
+
+| Campo | Qué controla |
+|---|---|
+| `tituloPestana` | Título de la pestaña del navegador |
+| `cabecera` | Líneas del título grande (una por elemento) |
+| `subtitulo` | Texto bajo el título (fechas) |
+| `pie` | Texto del pie de página |
+| `dias` | Lista de días (`fecha` en formato `DD/MM/AAAA` y `nota`) |
+
+Los días se muestran en el orden de `dias`. Si añades un día nuevo, aparece vacío; si quitas uno, sus actividades guardadas no se borran, simplemente dejan de mostrarse.
 
 ## 💾 Persistencia
 

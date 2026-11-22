@@ -1,0 +1,11 @@
+{
+  "tituloPestana": "Fin de semana en Burgos 2026",
+  "cabecera": ["Fin de semana en Burgos", "La Ruina"],
+  "subtitulo": "27 — 29 · NOVIEMBRE · 2026",
+  "pie": "Toca \"Añadir\" para apuntarte · toca la ✕ de un nombre para quitarlo",
+  "dias": [
+    { "fecha": "27/11/2026", "nota": "Viernes — Arranque" },
+    { "fecha": "28/11/2026", "nota": "Sábado — Fiestón" },
+    { "fecha": "29/11/2026", "nota": "Domingo — Familiar" }
+  ]
+}

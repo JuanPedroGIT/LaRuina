@@ -356,9 +356,8 @@
 <div class="bunting" id="bunting"></div>
 
 <header class="hero">
-  <h1>Fiestas de Agosto</h1>
-  <h1>La Ruina</h1>
-  <div class="sub">14 — 18 · AGOSTO · 2026</div>
+  <div id="hero-titles"></div>
+  <div class="sub" id="hero-sub"></div>
   <div class="view-tabs">
     <button class="tab-btn active" id="tab-program" onclick="switchTab('program')">Programa</button>
     <button class="tab-btn" id="tab-polls" onclick="switchTab('polls')">Encuestas</button>
@@ -371,7 +370,7 @@
 
 <div class="status" id="status"></div>
 
-<footer>Toca "Añadir" para apuntarte · toca la ✕ de un nombre para quitarlo</footer>
+<footer id="footer"></footer>
 
 <script>
 
@@ -380,6 +379,48 @@ let pollsState = null;
 let pollsLoaded = false;
 let currentTab = 'program';
 let useMock = false;
+let config = { dias: [] };
+
+// Carga config.json (títulos y fechas de la web)
+async function loadConfig(){
+  try {
+    const res = await fetch('config.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
+    config = await res.json();
+  } catch (e) {
+    console.error('Error al cargar config.json:', e);
+  }
+  if (!Array.isArray(config.dias)) config.dias = [];
+}
+
+function applyConfig(){
+  if (config.tituloPestana) document.title = config.tituloPestana;
+  const cab = Array.isArray(config.cabecera) ? config.cabecera : [config.cabecera || ''];
+  document.getElementById('hero-titles').innerHTML = cab.map(t => `<h1>${escapeHtml(String(t))}</h1>`).join('');
+  document.getElementById('hero-sub').textContent = config.subtitulo || '';
+  document.getElementById('footer').textContent = config.pie || '';
+}
+
+// Los días que se muestran salen de config.json. Si un día no existe aún en
+// los datos guardados se crea vacío; los días guardados que ya no estén en la
+// config se conservan (no se pierden sus actividades) pero no se muestran.
+function syncDaysWithConfig(){
+  if (!programState) programState = { days: [] };
+  if (!Array.isArray(programState.days)) programState.days = [];
+  if (!config.dias.length) return;
+  const byDate = new Map(programState.days.map(d => [d.date, d]));
+  const ordered = config.dias.map(cd => {
+    const day = byDate.get(cd.fecha) || { date: cd.fecha, note: '', activities: [] };
+    if (cd.nota !== undefined) day.note = cd.nota;
+    byDate.delete(cd.fecha);
+    return day;
+  });
+  programState.days = ordered.concat([...byDate.values()]);
+}
+
+function isDayVisible(day){
+  return !config.dias.length || config.dias.some(cd => cd.fecha === day.date);
+}
 
 const MOCK_PROGRAM = {
   days: [
@@ -508,7 +549,7 @@ function weekdayLabel(dateStr){
   const dt = new Date(y, m-1, d);
   const wd = dt.toLocaleDateString('es-ES', {weekday:'long'});
   const month = dt.toLocaleDateString('es-ES', {month:'long'});
-  return { weekday: wd.charAt(0).toUpperCase()+wd.slice(1), month, day: d };
+  return { weekday: wd.charAt(0).toUpperCase()+wd.slice(1), month, day: d, year: y };
 }
 
 const TYPE_LABEL = { comida:'Comida', cena:'Cena', actividad:'Actividad' };
@@ -540,7 +581,7 @@ async function switchTab(tab){
 function renderNav(){
   const nav = document.getElementById('daynav');
   if(!programState || !programState.days) return;
-  nav.innerHTML = programState.days.map(d=>{
+  nav.innerHTML = programState.days.filter(isDayVisible).map(d=>{
     const {weekday, day} = weekdayLabel(d.date);
     return `<a href="#day-${day}">${weekday.slice(0,3)} ${day}</a>`;
   }).join('');
@@ -565,7 +606,7 @@ function renderMainProgram(){
       </div>
       <div class="poll-form">
         <select id="new-act-day" style="padding:8px;border-radius:8px;border:1px solid var(--line);font-family:'Work Sans',sans-serif;font-size:0.88rem;background:#fff;">
-          ${programState.days.map((d,idx)=>{ const w = weekdayLabel(d.date); return `<option value="${idx}">${w.weekday} ${w.day} — ${d.note || d.date}</option>`; }).join('')}
+          ${programState.days.map((d,idx)=>{ if(!isDayVisible(d)) return ''; const w = weekdayLabel(d.date); return `<option value="${idx}">${w.weekday} ${w.day} — ${d.note || d.date}</option>`; }).join('')}
         </select>
         <input type="text" id="new-act-title" placeholder="Título de la actividad" />
         <select id="new-act-type" style="padding:8px;border-radius:8px;border:1px solid var(--line);font-family:'Work Sans',sans-serif;font-size:0.88rem;background:#fff;">
@@ -579,7 +620,8 @@ function renderMainProgram(){
   `;
 
   main.innerHTML = createForm + programState.days.map((day, dIdx)=>{
-    const {weekday, month, day: dnum} = weekdayLabel(day.date);
+    if(!isDayVisible(day)) return '';
+    const {weekday, month, day: dnum, year} = weekdayLabel(day.date);
     let body;
     if(day.activities.length === 0){
       body = `<div class="nada">${day.note || 'Nada programado'}</div>`;
@@ -621,7 +663,7 @@ function renderMainProgram(){
         <div class="num">${dnum}</div>
         <div class="meta">
           <div class="weekday">${weekday}</div>
-          <div class="month">${month} 2026</div>
+          <div class="month">${month} ${year}</div>
         </div>
       </div>
       ${body}
@@ -832,7 +874,10 @@ function setupStickyNav(){
 
 async function init(){
   renderBunting();
+  await loadConfig();
+  applyConfig();
   await loadProgram();
+  syncDaysWithConfig();
   renderNav();
   renderMainProgram();
   setupStickyNav();
